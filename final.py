@@ -106,6 +106,7 @@ def dataclean(text):
     # text = re.sub(r'\n+','',text)
     text = re.sub('Page [0-9] of [0-9]', '', text)
     text = re.sub("(?i)resume", "", text)
+    text = re.sub("\n", " ", text)
 
     # print(text)
     words = text.split('\n')
@@ -123,7 +124,7 @@ def dataclean(text):
     tempnum = [number.replace(" ", "").replace("-","")[-10:] for number in tempnum]
     score = jobmapping(corpus,textpostnlp)
     print(score)
-    datasetprof.append((words[0],tempemail,tempnum[0],textpostnlp,score))
+    datasetprof.append((words[0],tempemail,tempnum[0],text,textpostnlp,score))
 
 
 
@@ -141,7 +142,7 @@ files = glob.glob(os.path.join(path, '*.*'))
 corpus = preprocess_text("Functional consultants play a critical role in implementing technology solutions to meet the specific business needs of a client. Some of the technical skills that a functional consultant should possess include: Knowledge of business processes: A functional consultant should have a deep understanding of the business processes they are working with, including finance, supply chain management, human resources, etc Technical knowledge of software systems: A functional consultant should be well-versed in the software systems they are implementing, including their architecture, data models, and functionalities Project management: Functional consultants should have experience in project management, including planning, execution, and delivery of projects within deadlines Problem-solving: A functional consultant should be able to diagnose and solve technical problems related to the software systems they are working with Communication: Effective communication is critical for functional consultants, who must be able to articulate technical concepts to both technical and non-technical stakeholders Data analysis: Functional consultants should be able to analyze data, identify trends and insights, and use them to drive business decisions Technical writing: Functional consultants should have strong writing skills to document functional requirements, user manuals, and training materials Adaptability: Technology is constantly changing, and functional consultants should be able to adapt to new technologies and systems quickly.")
 textextr(files)
 print(datasetprof)
-datasetprofdf = pd.DataFrame(datasetprof,columns=['Name','Email','Phone Number','Job Corpus','Similarity Score'])
+datasetprofdf = pd.DataFrame(datasetprof,columns=['Name','Email','Phone Number','Text','Job Corpus','Similarity Score'])
 datasetprofdf.sort_values("Similarity Score", ascending=False, inplace=True)
 datasetprofdf.to_csv('datasetprof.csv',index=False)
 
